@@ -65,6 +65,13 @@ short p1Points=0, p2Points=0, winningPlayer=0;
     }
 
     void printBoard(){
+        //stackoverflow(șterge ecranul)
+        #if defined _WIN32
+            system("cls");
+        #else
+            system("clear");
+        #endif
+
         const char *h ="═", *v ="║", *tr="╗", *tl="╔", *br="╝", *bl="╚", *p1="1", *p2="2", *b="#", *e=" ";
         //marginea de sus
         output(tl);
@@ -231,7 +238,7 @@ short p1Points=0, p2Points=0, winningPlayer=0;
         printBoard();
         output("\n\n(P1) Input column number:");
         cin>>pos;
-        while(game.heights[pos-1]==game.height||pos>game.width){
+        while((unsigned short)(pos-1)>=game.width||game.heights[pos-1]==game.height){
             output("\nInput VALID column number:");
             cin>>pos;
         }
