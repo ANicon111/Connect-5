@@ -4,6 +4,9 @@ using namespace std;
 bool isInteractive=true;
 short p1Points=0, p2Points=0, winningPlayer=0;
 
+//infinit
+const float inf = 1.0/0.0;
+
 //<basics>
 #pragma region
     //datele stocate in fiecare căsuță
@@ -11,7 +14,7 @@ short p1Points=0, p2Points=0, winningPlayer=0;
         short player=0; //valori: -1 = perete, 1 = player 1, 2= player 2
         unsigned short parentX=-1,parentY=-1; //pozitia parintelui
         int childrenCount=0; //numarul de copii
-    };
+    } **tableCopy;
 
     //datele stocate in tablă
     struct Table{
@@ -19,6 +22,8 @@ short p1Points=0, p2Points=0, winningPlayer=0;
         Cell **table; //tabla (neinițializată)
         unsigned short *heights; //lista de înălțimi curente (neinițializată)
     }game;
+
+    unsigned short *tableCopyHeights;
 
     //program de afisare a textului in terminal pentru gui (modul neinteractiv)
     template<class T>
@@ -42,9 +47,15 @@ short p1Points=0, p2Points=0, winningPlayer=0;
         cin>>game.height;
         //crearea matricii tablei
         game.table = new Cell *[game.height];
-        game.heights = new unsigned short[game.width];
         for(int i=0;i<game.height;i++)
             game.table[i]=new Cell[game.width];
+        //crearea copiei matricii
+        tableCopy = new Cell *[game.height];
+        for(int i=0;i<game.height;i++)
+            tableCopy[i]=new Cell[game.width];
+        //crearea array-ului de înălțimi
+        game.heights = new unsigned short[game.width];
+        tableCopyHeights = new unsigned short[game.width];
     }
 
     void showWinner(){
@@ -212,21 +223,38 @@ short p1Points=0, p2Points=0, winningPlayer=0;
 
 //<AI>
 #pragma region
+
+    int getMoveValue(int pos, int depth){
+        if(tableCopyHeights[pos]==game.height)
+            return -inf;
+        //DE IMPLEMENTAT AI-ul
+        return rand();
+    }
+
     int getBestMove(){
-        int bestMove=-1;
+        for(int i=0;i<game.height;i++)
+            for(int j=0;j<game.width;j++)
+                tableCopy[i][j]=game.table[i][j];
+        for(int i=0;i<game.width;i++)
+            tableCopyHeights[i]=game.heights[i];
+        int bestMove=0;
+        float bestMoveValue=getMoveValue(0, 0);
+        for(int i=1;i<game.width;i++){
+            float val=getMoveValue(i, 0);
+            if(val>bestMoveValue){
+                bestMove=i;
+                bestMoveValue=val;
+            }
+        }
+        if(bestMoveValue==-inf)
+            return -1;
         return bestMove;
     }
 
     void runAI(){
-        int pos=-1;
-        printBoard();
-        output("\n\n(P2) Input column number:");
-        cin>>pos;
-        while(game.heights[pos-1]==game.height||pos>game.width){
-            output("\nInput VALID column number:");
-            cin>>pos;
-        }
-        placePiece(pos-1, 2);
+        int pos=getBestMove();
+        if(pos!=-1)
+            placePiece(pos, 2);
     }
 #pragma endregion
 //</AI>
