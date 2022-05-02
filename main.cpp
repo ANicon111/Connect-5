@@ -39,6 +39,16 @@ const float inf = 1.0/0.0;
             std::cout<<text;
     }
 
+    void clear(){
+        if(isInteractive){
+            #if defined _WIN32
+                system("cls");
+            #else
+                system("clear");
+            #endif
+        }
+    }
+
     //se citesc setarile jocului aici
     void init(){
         output("Lățimea tablei:");
@@ -76,13 +86,7 @@ const float inf = 1.0/0.0;
     }
 
     void printBoard(){
-        //stackoverflow(șterge ecranul)
-        #if defined _WIN32
-            system("cls");
-        #else
-            system("clear");
-        #endif
-
+        clear();
         const char *h ="═", *v ="║", *tr="╗", *tl="╔", *br="╝", *bl="╚", *p1="□", *p2="■", *b="#", *e=" ";
         //marginea de sus
         output(tl);
@@ -253,6 +257,8 @@ const float inf = 1.0/0.0;
 
     void runAI(){
         int pos=getBestMove();
+        guiOutput(pos);
+        guiOutput("\n");
         if(pos!=-1)
             placePiece(pos, 2);
     }
@@ -279,7 +285,7 @@ const float inf = 1.0/0.0;
 
 //<main>
 #pragma region
-    int main(int argc, char **argv){
+    void main(int argc, char **argv){
         //daca ruleaza in gui programul este lansat "connect5.exe 0" 
         //pentru a nu arata informatii inutile programului gui
         if(argc>1)
@@ -289,7 +295,6 @@ const float inf = 1.0/0.0;
         while(winningPlayer==0)
             runGame();
         showWinner();
-        return 0;
     }
 #pragma endregion
 //<main>
