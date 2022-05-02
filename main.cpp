@@ -2,11 +2,14 @@
 using namespace std;
 
 bool isInteractive=true;
-short p1Points=0, p2Points=0, winningPlayer=0;
+short p1Points=0, p2Points=0, winningPlayer=0, p1PointsCopy, p2PointsCopy;
 
 //infinit
 const float inf = 1.0/0.0;
 
+//adâncimea maximă de căutare
+int maxDepth=1;
+ 
 //<basics>
 #pragma region
     //datele stocate in fiecare căsuță
@@ -66,6 +69,7 @@ const float inf = 1.0/0.0;
         //crearea array-ului de înălțimi
         game.heights = new unsigned short[game.width];
         tableCopyHeights = new unsigned short[game.width];
+        maxDepth=5;//oof 
     }
 
     void showWinner(){
@@ -87,7 +91,7 @@ const float inf = 1.0/0.0;
 
     void printBoard(){
         clear();
-        const char *h ="═", *v ="║", *tr="╗", *tl="╔", *br="╝", *bl="╚", *p1="□", *p2="■", *b="#", *e=" ";
+        const char *h ="═", *v ="║", *tr="╗", *tl="╔", *br="╝", *bl="╚", *p1="□", *p2="■", *b="╳", *e=" ";
         //marginea de sus
         output(tl);
         for(int i=0;i<game.width;i++)
@@ -227,12 +231,27 @@ const float inf = 1.0/0.0;
 
 //<AI>
 #pragma region
+    pair<unsigned short, unsigned short> getAIParent(unsigned short x, unsigned short y){
+        while(tableCopy[x][y].parentX!=(unsigned short)-1&&(tableCopy[x][y].parentX!=x&&tableCopy[x][y].parentY!=y)){
+            Cell c=tableCopy[x][y];
+            x=c.parentX;
+            y=c.parentY;
+        }
+        return pair<unsigned short, unsigned short>(x, y);
+    }
 
-    int getMoveValue(int pos, int depth){
-        if(tableCopyHeights[pos]==game.height)
+    float getMoveValue(int y){
+        float val=0;
+        if(tableCopyHeights[y]==game.height)
             return -inf;
-        //DE IMPLEMENTAT AI-ul
-        return rand();
+        int x=tableCopyHeights[y];
+        if(x>0&&tableCopy[x-1][y].player!=-1)
+            val+=tableCopy[x-1][y].player==2?2:1;
+        if(y>0&&tableCopy[x][y-1].player!=-1&&tableCopy[x][y-1].player!=0)
+            val+=tableCopy[x][y-1].player==2?2:1;
+        if(y<game.width-1&&tableCopy[x][y+1].player!=-1&&tableCopy[x][y+1].player!=0)
+            val+=tableCopy[x][y+1].player==2?2:1;
+        return val;
     }
 
     int getBestMove(){
@@ -241,10 +260,12 @@ const float inf = 1.0/0.0;
                 tableCopy[i][j]=game.table[i][j];
         for(int i=0;i<game.width;i++)
             tableCopyHeights[i]=game.heights[i];
+        p1PointsCopy=p1Points;
+        p2PointsCopy=p2Points;
         int bestMove=0;
-        float bestMoveValue=getMoveValue(0, 0);
+        float bestMoveValue=getMoveValue(0);
         for(int i=1;i<game.width;i++){
-            float val=getMoveValue(i, 0);
+            float val=getMoveValue(i);
             if(val>bestMoveValue){
                 bestMove=i;
                 bestMoveValue=val;
@@ -285,8 +306,8 @@ const float inf = 1.0/0.0;
 
 //<main>
 #pragma region
-    void main(int argc, char **argv){
-        //daca ruleaza in gui programul este lansat "connect5.exe 0" 
+    int main(int argc, char **argv){
+        //daca ruleaza in gui programul este lansat cu argumentul "0" 
         //pentru a nu arata informatii inutile programului gui
         if(argc>1)
             if(argv[1][0]=='0')
@@ -295,6 +316,7 @@ const float inf = 1.0/0.0;
         while(winningPlayer==0)
             runGame();
         showWinner();
+        return 0;
     }
 #pragma endregion
 //<main>
