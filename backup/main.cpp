@@ -56,9 +56,9 @@ void clear()
 // se citesc setarile jocului aici
 void init()
 {
-    output("Lățimea tablei:");
+    output("Latimea tablei:");
     cin >> game.width;
-    output("Înălțimea tablei:");
+    output("Inaltimea tablei:");
     cin >> game.height;
     // crearea matricii tablei
     game.table = new Cell *[game.height];
@@ -92,7 +92,7 @@ void showWinner()
 void printBoard()
 {
     clear();
-    const char *h = "═", *v = "║", *tr = "╗", *tl = "╔", *br = "╝", *bl = "╚", *p1 = "□", *p2 = "■", *b = "╳", *e = " ";
+    const char *h = "-", *v = "|", *tr = "+", *tl = "+", *br = "+", *bl = "+", *p1 = "X", *p2 = "O", *b = "#", *e = " ";
     // marginea de sus
     output(tl);
     for (int i = 0; i < game.width; i++)
