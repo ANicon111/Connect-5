@@ -83,7 +83,7 @@ const float inf = 1.0/0.0;
             system("clear");
         #endif
 
-        const char *h ="═", *v ="║", *tr="╗", *tl="╔", *br="╝", *bl="╚", *p1="1", *p2="2", *b="#", *e=" ";
+        const char *h ="═", *v ="║", *tr="╗", *tl="╔", *br="╝", *bl="╚", *p1="□", *p2="■", *b="#", *e=" ";
         //marginea de sus
         output(tl);
         for(int i=0;i<game.width;i++)
