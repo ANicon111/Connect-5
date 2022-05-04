@@ -76,13 +76,21 @@ void showWinner()
     switch (winningPlayer)
     {
     case 1:
-        output("Player 1 won");
+        output("Player-ul a câștigat (");
+        output(p1Points);
+        output("-");
+        output(p2Points);
+        output(")\n");
         break;
     case 2:
-        output("Player 2 won");
+        output("AI-ul a câștigat (");
+        output(p2Points);
+        output("-");
+        output(p1Points);
+        output(")\n");
         break;
     case -1:
-        output("Tied");
+        output("Egalitate\n");
         break;
     default:
         break;
@@ -92,7 +100,7 @@ void showWinner()
 void printBoard()
 {
     clear();
-    const char *h = "═", *v = "║", *tr = "╗", *tl = "╔", *br = "╝", *bl = "╚", *p1 = "□", *p2 = "■", *b = "╳", *e = " ";
+    const char *h = "═", *v = "║", *tr = "╗", *tl = "╔", *br = "╝", *bl = "╚", *p1 = "□", *p2 = "■", *b = "▚", *e = " ";
     // marginea de sus
     output(tl);
     for (int i = 0; i < game.width; i++)
@@ -132,9 +140,9 @@ void printBoard()
         output(h);
     output(br);
     output("\n");
-    output("P1:");
+    output("P:");
     output(p1Points);
-    output(" P2:");
+    output(" AI:");
     output(p2Points);
 }
 #pragma endregion
@@ -259,7 +267,7 @@ float getMoveValue(int y)
         val += game.table[x][y - 1].player == 2 ? samePieceBonus : oppositePieceBonus;
     if (y < game.width - 1 && game.table[x][y + 1].player != -1 && game.table[x][y + 1].player != 0)
         val += game.table[x][y + 1].player == 2 ? samePieceBonus : oppositePieceBonus;
-    return val;
+    return val + ( rand() % 75 ) / 100.0;
 }
 
 int getBestMove()
@@ -297,11 +305,11 @@ void runGame()
 {
     int pos = -1;
     printBoard();
-    output("\n\n(P1) Input column number:");
+    output("\n\nIntroduceți o poziție:");
     cin >> pos;
     while ((unsigned short)(pos - 1) >= game.width || game.heights[pos - 1] == game.height)
     {
-        output("\nInput VALID column number:");
+        output("\nIntroduceți o poziție validă:");
         cin >> pos;
     }
     placePiece(pos - 1, 1);

@@ -9,7 +9,7 @@ const float inf = 1.0 / 0.0;
 
 //<basics>
 #pragma region
-// datele stocate in fiecare căsuță
+// datele stocate in fiecare casuta
 struct Cell
 {
     short player = 0;                          // valori: -1 = perete, 1 = player 1, 2= player 2
@@ -17,12 +17,12 @@ struct Cell
     int childrenCount = 0;                     // numarul de copii
 };
 
-// datele stocate in tablă
+// datele stocate in tabla
 struct Table
 {
     unsigned short width = 6, height = 7; // dimensiunile tablei
-    Cell **table;                         // tabla (neinițializată)
-    unsigned short *heights;              // lista de înălțimi curente (neinițializată)
+    Cell **table;                         // tabla (neinitializata)
+    unsigned short *heights;              // lista de inaltimi curente (neinitializata)
 } game;
 
 // program de afisare a textului in terminal pentru gui (modul neinteractiv)
@@ -30,7 +30,7 @@ template <class T>
 void guiOutput(T text)
 {
     if (!isInteractive)
-        std::cout << text;
+        cout << text;
 }
 
 // program de afisare a textului in terminal pentru player (modul interactiv)
@@ -38,7 +38,7 @@ template <class T>
 void output(T text)
 {
     if (isInteractive)
-        std::cout << text;
+        cout << text;
 }
 
 void clear()
@@ -58,13 +58,13 @@ void init()
 {
     output("Latimea tablei:");
     cin >> game.width;
-    output("Inaltimea tablei:");
+    output("Înaltimea tablei:");
     cin >> game.height;
     // crearea matricii tablei
     game.table = new Cell *[game.height];
     for (int i = 0; i < game.height; i++)
         game.table[i] = new Cell[game.width];
-    // crearea array-ului de înălțimi
+    // crearea array-ului de inaltimi
     game.heights = new unsigned short[game.width];
     for (int i = 0; i < game.width; i++)
         game.heights[i] = 0;
@@ -76,13 +76,21 @@ void showWinner()
     switch (winningPlayer)
     {
     case 1:
-        output("Player 1 won");
+        output("Player-ul a castigat (");
+        output(p1Points);
+        output("-");
+        output(p2Points);
+        output(")\n");
         break;
     case 2:
-        output("Player 2 won");
+        output("AI-ul a castigat (");
+        output(p2Points);
+        output("-");
+        output(p1Points);
+        output(")\n");
         break;
     case -1:
-        output("Tied");
+        output("Egalitate\n");
         break;
     default:
         break;
@@ -100,7 +108,7 @@ void printBoard()
     output(tr);
     output("\n");
 
-    // rândurile
+    // randurile
     for (int i = game.height - 1; i >= 0; i--)
     {
         output(v);
@@ -132,9 +140,9 @@ void printBoard()
         output(h);
     output(br);
     output("\n");
-    output("P1:");
+    output("P:");
     output(p1Points);
-    output(" P2:");
+    output(" AI:");
     output(p2Points);
 }
 #pragma endregion
@@ -198,7 +206,7 @@ void placePiece(unsigned short pos, short player)
     // plasarea piesei
     game.table[height][pos].player = player;
     game.table[height][pos].childrenCount = 1;
-    // verificarea tablei dacă este plină
+    // verificarea tablei daca este plina
     bool allMaxed = true;
     for (int i = 0; i < game.width; i++)
         if (game.heights[i] < game.height)
@@ -259,7 +267,7 @@ float getMoveValue(int y)
         val += game.table[x][y - 1].player == 2 ? samePieceBonus : oppositePieceBonus;
     if (y < game.width - 1 && game.table[x][y + 1].player != -1 && game.table[x][y + 1].player != 0)
         val += game.table[x][y + 1].player == 2 ? samePieceBonus : oppositePieceBonus;
-    return val;
+    return val + ( rand() % 75 ) / 100.0;
 }
 
 int getBestMove()
@@ -297,11 +305,11 @@ void runGame()
 {
     int pos = -1;
     printBoard();
-    output("\n\n(P1) Input column number:");
+    output("\n\nIntroduceti o pozitie:");
     cin >> pos;
     while ((unsigned short)(pos - 1) >= game.width || game.heights[pos - 1] == game.height)
     {
-        output("\nInput VALID column number:");
+        output("\nIntroduceti o pozitie valida:");
         cin >> pos;
     }
     placePiece(pos - 1, 1);
