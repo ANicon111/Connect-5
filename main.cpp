@@ -30,7 +30,7 @@ template <class T>
 void guiOutput(T text)
 {
     if (!isInteractive)
-        std::cout << text;
+        cout << text;
 }
 
 // program de afisare a textului in terminal pentru player (modul interactiv)
@@ -38,7 +38,7 @@ template <class T>
 void output(T text)
 {
     if (isInteractive)
-        std::cout << text;
+        cout << text;
 }
 
 void clear()
