@@ -1,4 +1,5 @@
 #include "iostream"
+#include "cstdlib"
 using namespace std;
 
 bool isInteractive = true;
@@ -58,7 +59,7 @@ void init()
 {
     output("Latimea tablei:");
     cin >> game.width;
-    output("Înaltimea tablei:");
+    output("Inaltimea tablei:");
     cin >> game.height;
     // crearea matricii tablei
     game.table = new Cell *[game.height];
