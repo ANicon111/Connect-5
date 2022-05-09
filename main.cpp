@@ -8,6 +8,9 @@ short p1Points = 0, p2Points = 0, winningPlayer = 0;
 // infinit
 const float inf = 1.0 / 0.0;
 
+// caractere speciale
+const char *h = "══", *v = "║", *tr = "╗", *tl = "╔", *br = "╝", *bl = "╚", *p1 = "◁▷", *p2 = "◄►", *b = "▀▄", *e = "  ";
+
 //<basics>
 #pragma region
 // datele stocate in fiecare căsuță
@@ -101,7 +104,6 @@ void showWinner()
 void printBoard()
 {
     clear();
-    const char *h = "═", *v = "║", *tr = "╗", *tl = "╔", *br = "╝", *bl = "╚", *p1 = "□", *p2 = "■", *b = "▚", *e = " ";
     // marginea de sus
     output(tl);
     for (int i = 0; i < game.width; i++)
@@ -141,9 +143,13 @@ void printBoard()
         output(h);
     output(br);
     output("\n");
-    output("P:");
+    output("P(");
+    output(p1);
+    output("):");
     output(p1Points);
-    output(" AI:");
+    output(" AI(");
+    output(p2);
+    output("):");
     output(p2Points);
 }
 #pragma endregion

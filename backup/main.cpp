@@ -8,6 +8,9 @@ short p1Points = 0, p2Points = 0, winningPlayer = 0;
 // infinit
 const float inf = 1.0 / 0.0;
 
+// caractere speciale
+const char *h = "--", *v = "|", *tr = "+", *tl = "+", *br = "+", *bl = "+", *p1 = "1 ", *p2 = "2 ", *b = "##", *e = "  ";
+
 //<basics>
 #pragma region
 // datele stocate in fiecare casuta
@@ -101,7 +104,6 @@ void showWinner()
 void printBoard()
 {
     clear();
-    const char *h = "-", *v = "|", *tr = "+", *tl = "+", *br = "+", *bl = "+", *p1 = "X", *p2 = "O", *b = "#", *e = " ";
     // marginea de sus
     output(tl);
     for (int i = 0; i < game.width; i++)
